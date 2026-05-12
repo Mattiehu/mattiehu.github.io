@@ -1,1 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gathering - Suspects</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=EB+Garamond:wght@400;500&display=swap');
 
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'EB Garamond', serif;
+      overflow: hidden;
+      color: #e2d9c8;
+    }
+
+    /* 背景图：不加暗化处理 */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('People.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+
+    /* 维持统一的微弱胶片颗粒感 */
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 左上角返回键 */
+    .back-nav {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 10;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 15px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+    .back-nav:hover {
+      background: #c9a84c;
+      color: #000;
+      border-color: #c9a84c;
+    }
+
+    /* 标题区域 */
+    .title-container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 60px;
+      min-height: 120px; /* 给两行文字留够空间 */
+    }
+
+    #typewriter-top {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      font-style: italic;
+      text-shadow: 2px 2px 15px rgba(0,0,0,0.9);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #typewriter-sub {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.5rem;
+      color: #c9a84c;
+      text-shadow: 1px 1px 10px rgba(0,0,0,0.9);
+      display: block;
+    }
+
+    /* 选项按钮 */
+    .button-wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 30px;
+      width: 85%;
+      max-width: 900px;
+      justify-content: center;
+    }
+
+    .choice-card {
+      flex: 1;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.7); /* 稍微深一点，确保在复杂背景上清晰 */
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      backdrop-filter: blur(8px);
+      text-align: center;
+      text-decoration: none;
+      color: #e2d9c8;
+      font-family: 'EB Garamond', serif;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.95rem;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+    }
+
+    .choice-card:hover {
+      background: rgba(201, 168, 76, 0.25);
+      border-color: #e8d08a;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      color: #fff;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #c9a84c;
+      margin-left: 5px;
+      animation: blink 0.7s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <a href="Interactivestory.html" class="back-nav">← Back</a >
+
+  <div class="title-container">
+    <span id="typewriter-top"></span><br>
+    <span id="typewriter-sub"></span><span class="cursor"></span>
+  </div>
+
+  <div class="button-wrapper">
+    <a href="interrogate_butler.html" class="choice-card">Interrogate the Butler？</a >
+    <a href="watch_wait.html" class="choice-card">Watch & Wait</a >
+  </div>
+
+  <script>
+    const line1 = "You Gathered Everyone that are still here...";
+    const line2 = "Would you…";
+    
+    let i = 0;
+    let j = 0;
+    const speed = 60;
+
+    function typeWriter() {
+      if (i < line1.length) {
+        document.getElementById("typewriter-top").innerHTML += line1.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      } else if (j < line2.length) {
+        document.getElementById("typewriter-sub").innerHTML += line2.charAt(j);
+        j++;
+        setTimeout(typeWriter, speed);
+      }
+    }
+
+    window.onload = typeWriter;
+  </script>
+
+</body>
+</html>
