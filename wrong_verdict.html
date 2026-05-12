@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Failed - Wrong Verdict</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=EB+Garamond:wght@400;500&display=swap');
 
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'EB Garamond', serif;
+      overflow: hidden;
+      color: #e2d9c8;
+    }
+
+    /* 背景图：不加暗化处理 */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('Wrong.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+
+    /* 维持统一的微弱胶片颗粒感 */
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 左上角返回键，指向 bottle 搜查页 */
+    .back-nav {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 10;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+    .back-nav:hover {
+      background: #8b0000;
+      color: #fff;
+      border-color: #8b0000;
+    }
+
+    /* 失败文本区域 */
+    .text-container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
+      padding: 50px;
+      border-radius: 2px;
+    }
+
+    #failed-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 700;
+      color: #8b0000; /* 深红色暗示错误的抉择 */
+      letter-spacing: 0.3em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(0,0,0,1);
+    }
+
+    #failed-sub {
+      font-size: 1.4rem;
+      color: #e2d9c8;
+      font-style: italic;
+      text-shadow: 1px 1px 10px rgba(0,0,0,1);
+    }
+
+    /* 底部导航选择 */
+    .bottom-controls {
+      position: fixed;
+      bottom: 60px;
+      z-index: 2;
+      display: flex;
+      gap: 50px;
+    }
+
+    .nav-option {
+      text-decoration: none;
+      color: #b5a896;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 10px;
+      border-bottom: 1px solid transparent;
+      transition: all 0.4s ease;
+    }
+
+    .nav-option:hover {
+      color: #fff;
+      border-bottom: 1px solid #8b0000;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #8b0000;
+      margin-left: 10px;
+      animation: blink 0.7s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <a href="check_bottle.html" class="back-nav">← Back</a >
+
+  <div class="text-container">
+    <h1 id="failed-title"></h1>
+    <p id="failed-sub"></p ><span class="cursor" id="cursor"></span>
+  </div>
+
+  <div class="bottom-controls">
+    <a href="index.html" class="nav-option">Exit Game</a >
+    <a href="Interactivestory.html" class="nav-option">Restart</a >
+  </div>
+
+  <script>
+    const titleText = "MISSION FAILED";
+    const subText = "Wrong verdict. Lily was arrested, and the real killer escaped.";
+    
+    let i = 0;
+    let j = 0;
+    const speed = 90;
+
+    function typeWriter() {
+      if (i < titleText.length) {
+        document.getElementById("failed-title").innerHTML += titleText.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      } else if (j < subText.length) {
+        document.getElementById("failed-sub").innerHTML += subText.charAt(j);
+        j++;
+        setTimeout(typeWriter, speed / 1.5);
+      } else {
+        // 完成后隐藏光标
+        document.getElementById("cursor").style.display = "none";
+      }
+    }
+
+    window.onload = typeWriter;
+  </script>
+
+</body>
+</html>
