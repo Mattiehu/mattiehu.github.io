@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Scream in the Dark · Villa Mystery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
 
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #07070e;
+      font-family: 'EB Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('../Startimage.jpg');
+      background-size: cover;
+      background-position: center top;
+      filter: brightness(0.38) sepia(0.2);
+      z-index: 0;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.3) 0%,
+        rgba(0,0,0,0.5) 50%,
+        rgba(0,0,0,0.85) 100%
+      );
+      z-index: 1;
+    }
+
+    /* ── Back button ── */
+    .back-btn {
+      position: fixed;
+      top: 22px; left: 24px;
+      z-index: 100;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      color: #7a6a50;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .back-btn:hover { color: #c9a84c; }
+
+    /* ── Main content ── */
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 120px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: #e2d9c8;
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeTitle 1.2s ease 0.3s both;
+    }
+
+    @keyframes fadeTitle {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .rule {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeTitle 1s ease 0.8s both;
+    }
+
+    /* Typewriter */
+    .typewriter-wrap {
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    #typewriter {
+      font-size: 1.05rem;
+      line-height: 1.95;
+      color: #b8b0a0;
+      white-space: pre-wrap;
+      text-align: center;
+      min-height: 200px;
+    }
+
+    #cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: #c9a84c;
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .prompt {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      letter-spacing: 0.14em;
+      color: #6a6050;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 24px;
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+    .prompt.visible { opacity: 1; }
+
+    /* ── Buttons ── */
+    .choices {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .choices.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .choice-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      padding: 20px 16px;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(0,0,0,0.4);
+      color: #c9a84c;
+      text-decoration: none;
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+      line-height: 1.4;
+      transition: border-color 0.3s, background 0.3s, color 0.3s, transform 0.25s;
+      backdrop-filter: blur(4px);
+    }
+
+    .choice-btn:hover {
+      border-color: #c9a84c;
+      background: rgba(201,168,76,0.1);
+      color: #e8d08a;
+      transform: translateY(-3px);
+    }
+
+    .choice-btn .btn-icon { font-size: 1.4rem; margin-bottom: 8px; opacity: 0.7; }
+    .choice-btn .btn-label { font-weight: 600; font-size: 1rem; }
+    .choice-btn .btn-sub {
+      font-style: italic;
+      font-size: 0.82rem;
+      color: #8a7a60;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 500px) {
+      .choices { flex-direction: column; align-items: center; }
+      .choice-btn { width: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="bg-overlay"></div>
+
+  <a class="back-btn" href=" ">← Back</a >
+
+  <div class="content">
+    <h1 class="title">A Scream in the Dark</h1>
+    <div class="rule"></div>
+
+    <div class="typewriter-wrap">
+      <div id="typewriter"><span id="cursor"></span></div>
+    </div>
+
+    <p class="prompt" id="prompt">What would you do first?</p >
+
+    <div class="choices" id="choices">
+      <a class="choice-btn" href="story/scene-a.html">
+        <span class="btn-icon">🔍</span>
+        <span class="btn-label">Search the Study</span>
+        <span class="btn-sub">Look for physical evidence</span>
+      </a >
+      <a class="choice-btn" href="story/scene-b.html">
+        <span class="btn-icon">👥</span>
+        <span class="btn-label">Question the People</span>
+        <span class="btn-sub">Gather everyone before they talk</span>
+      </a >
+    </div>
+  </div>
+
+<script>
+  const text = `It is past midnight. A blizzard has sealed every road in and out. You are a detective, invited to Mr. Chen's annual winter dinner at his private estate. The evening was supposed to end with brandy and small talk.
+
+Instead, it ends with a scream.
+
+You find Mr. Chen slumped at his desk in the locked study, dead. Four guests remain in the villa — each with a secret, perhaps one with a reason to kill. Dawn is six hours away. The killer is still here.`;
+
+  const el      = document.getElementById('typewriter');
+  const cursor  = document.getElementById('cursor');
+  const prompt  = document.getElementById('prompt');
+  const choices = document.getElementById('choices');
+
+  let i = 0;
+  const speed = 28;
+
+  function type() {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i]), cursor);
+      i++;
+      setTimeout(type, speed);
+    } else {
+      cursor.style.display = 'none';
+      setTimeout(() => {
+        prompt.classList.add('visible');
+        choices.classList.add('visible');
+      }, 400);
+    }
+  }
+
+  setTimeout(type, 1600);
+</script>
+
+</body>
+</html>
